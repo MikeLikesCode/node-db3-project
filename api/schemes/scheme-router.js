@@ -2,7 +2,6 @@
 const express = require('express')
 const { checkSchemeId, validateScheme, validateStep } = require('./scheme-middleware')
 const Schemes = require('./scheme-model.js')
-
 const router = express.Router()
 
 /**
