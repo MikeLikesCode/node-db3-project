@@ -2,12 +2,11 @@ const Scheme = require('./scheme-model');
 
 const checkSchemeId = async (req, res, next) => {
   try {
-    const scheme = await Scheme.findById(req.params.scheme_id);
+    const scheme = await Scheme.doesSchemeExist(req.params.scheme_id);
     if (!scheme) {
-      next({ message: `scheme with scheme_id ${req.params.scheme_id} not found `, status: 404})
+      res.status(404).json({ message: `scheme with scheme_id ${req.params.scheme_id} not found`})
     }
     else {
-      res.scheme = scheme
       next()
     }
   }
@@ -25,7 +24,12 @@ const checkSchemeId = async (req, res, next) => {
   }
 */
 const validateScheme = (req, res, next) => {
-
+  if ( !req.body.scheme_name || req.body.scheme_name === '' || typeof req.body.scheme_name !== "string"){
+    next({ message: "invalid scheme_name", status: 400})
+  }
+  else{
+    next()
+  }
 }
 
 /*
@@ -38,7 +42,11 @@ const validateScheme = (req, res, next) => {
   }
 */
 const validateStep = (req, res, next) => {
-
+  if (!req.body.instructions || typeof req.body.instructions !== 'string' || typeof req.body.step_number !== 'number' || req.body.step_number < 1 ){
+    next({ message: "invalid step", status: 400})
+  } else{
+    next()
+  }
 }
 
 module.exports = {
